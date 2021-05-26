@@ -9,18 +9,45 @@ from tkinter import filedialog
 import os
 import re
 
-'''打开选择文件夹对话框'''
-root = tk.Tk()
-root.withdraw()
+def showFileName():
+    '''打开选择文件夹对话框'''
+    root = tk.Tk()
+    root.withdraw()
+    print('请选择目标文件夹')
+    folderPath = filedialog.askdirectory() #获得选择好的文件夹
+    # Filepath = filedialog.askopenfilename() #获得选择好的文件
+    print('请选择保存路径')
+    saveFile = filedialog.asksaveasfilename(initialfile='文件名.txt')
+    file = open(saveFile, 'w')
+    pattern = re.compile('.+(?=\.)')
 
-folderPath = filedialog.askdirectory() #获得选择好的文件夹
-# Filepath = filedialog.askopenfilename() #获得选择好的文件
-filenames = os.listdir(folderPath)
-saveFile = filedialog.asksaveasfilename(initialfile='文件名.txt')
-file = open(saveFile,'w')
-pattern = re.compile('.+(?=\.)')
+    def getFileName(folder):
+        filenames = os.listdir(folder)
 
-for filename in filenames:
-    file.write(pattern.match(filename).group()+'\n')
+        for filename in filenames:
+            match = pattern.match(filename)
+            if match == None:               #遇到文件夹就递归
+                print('已读取目录：'+folder+'/'+filename)
+                getFileName(folder+'/'+filename)
+            else:
+                file.write(match.group()+'\n')
+                print('文件名：'+filename)
 
-file.close()
+    getFileName(folderPath)
+    file.close()
+    # pattern = re.compile('.+(?=\.)')
+    # filename = 'GitWorkSpace'
+    # if pattern.match(filename) == None:
+    #     print('OK')
+if __name__ == '__main__':
+    while 1:
+        try:
+            showFileName()
+            break
+        except NotADirectoryError as e:
+            print('此文件缺少后缀名，请修改后重新选择目标文件夹：'+e.filename)
+            i = input('修改完毕后请按任意键继续，或按e退出程序：')
+            if i == 'e' or i == 'E':
+                break
+            else:
+                continue
