@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['getFileName.py'],
-             pathex=['D:\\GitWorkSpace\\getFileName'],
+             pathex=['D:\\gitWorkSpace\\getFileName'],
              binaries=[],
              datas=[],
              hiddenimports=[],

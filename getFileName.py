@@ -18,7 +18,7 @@ def showFileName():
     # Filepath = filedialog.askopenfilename() #获得选择好的文件
     print('请选择保存路径')
     saveFile = filedialog.asksaveasfilename(initialfile='文件名.txt')
-    file = open(saveFile, 'w')
+    file = open(saveFile, 'w',encoding='utf-8')
     pattern = re.compile('.+(?=\.)')
 
     def getFileName(folder):
