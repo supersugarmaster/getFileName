@@ -1,8 +1,9 @@
-#-*- coding = utf-8 -*-
-#@Time : 2021/5/22 12:53
-#@Author : Robert Weng
-#@File : getFileName.py
-#@Software : PyCharm
+# -*- coding: UTF-8 -*-
+"""
+@author:wb.wengchengshuo2017
+@file:getFileName.py
+@time:2021/06/06
+"""
 
 import tkinter as tk
 from tkinter import filedialog
@@ -21,33 +22,15 @@ def showFileName():
     file = open(saveFile, 'w',encoding='utf-8')
     pattern = re.compile('.+(?=\.)')
 
-    def getFileName(folder):
-        filenames = os.listdir(folder)
+    #当前路径下所有非目录子文件
+    for root, dirs, files in os.walk(folderPath):
+        file.write(root+':\n')
+        for f in files:
+            f = pattern.match(f)
+            file.write(f.group()+'\n')
+        file.write('\n')
 
-        for filename in filenames:
-            match = pattern.match(filename)
-            if match == None:               #遇到文件夹就递归
-                print('已读取目录：'+folder+'/'+filename)
-                getFileName(folder+'/'+filename)
-            else:
-                file.write(match.group()+'\n')
-                print('文件名：'+filename)
-
-    getFileName(folderPath)
     file.close()
-    # pattern = re.compile('.+(?=\.)')
-    # filename = 'GitWorkSpace'
-    # if pattern.match(filename) == None:
-    #     print('OK')
-if __name__ == '__main__':
-    while 1:
-        try:
-            showFileName()
-            break
-        except NotADirectoryError as e:
-            print('此文件缺少后缀名，请修改后重新选择目标文件夹：'+e.filename)
-            i = input('修改完毕后请按任意键继续，或按e退出程序：')
-            if i == 'e' or i == 'E':
-                break
-            else:
-                continue
+
+if __name__=='__main__':
+    showFileName()
